@@ -49,13 +49,13 @@ for k = [1 2 3 5 10 20 30 40 50 60 75 100 125 150 160 170 180 185 190 195 199]
             
             %For current value of k, figure out the index of the closest
             %coefficient from the array eigcoeffs_training
-            [M,I] = max(abs(eigcoeffs_training - repmat(eigcoeffs_im, 1, N)));
+            [M,I] = max(sum((eigcoeffs_training - repmat(eigcoeffs_im, 1, N))));
             
             %Based on the index, compute the predicted identity.
             identity = round(I / 5);
             %If the prediction matches the actual identity, increment the recognition rate rec_rate
             if identity == i
-                rec_rate += 1;
+                rec_rate = rec_rate + 1;
             end
         end
     end

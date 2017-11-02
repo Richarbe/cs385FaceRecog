@@ -15,7 +15,7 @@ for i=1:40
         im = double(imread(fname));   
         count = count+1;
         A(:,count) = im(:);
-        
+        id(count) = i;
         %In following line, record the identity of the person in array id
         
     end
@@ -49,10 +49,12 @@ for k = [1 2 3 5 10 20 30 40 50 60 75 100 125 150 160 170 180 185 190 195 199]
             
             %For current value of k, figure out the index of the closest
             %coefficient from the array eigcoeffs_training
-            [M,I] = max(abs(eigcoeffs_training - repmat(eigcoeffs_im, 1, N)));
+            diff = eigcoeffs_training - repmat(eigcoeffs_im, 1, N);
+            diffvalue = sum((diff).^2);
+            [M,I] = min(sum((eigcoeffs_training - repmat(eigcoeffs_im, 1, N)).^2));
             
             %Based on the index, compute the predicted identity.
-            identity = round(I / 5);
+            identity = id(I);
             %If the prediction matches the actual identity, increment the recognition rate rec_rate
             if identity == i
                 rec_rate = rec_rate + 1;
