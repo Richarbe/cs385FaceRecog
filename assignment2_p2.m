@@ -45,13 +45,14 @@ for k = [1 2 3 5 10 20 30 40 50 60 75 100 125 150 160 170 180 185 190 195 199]
             fname = sprintf ('att_faces/s%d/%d.pgm',i,j); %Format filename of the test image
             im = double(imread(fname));
             %Compute eigencoefficients of this image. This will be based on V as well as meanA that were computed in the training phase!
-            eigcoeffs_im = V.' * im(:);
+            eigcoeffs_im = V.' * (im(:) - meanA);
             
             %For current value of k, figure out the index of the closest
             %coefficient from the array eigcoeffs_training
-            diff = eigcoeffs_training - repmat(eigcoeffs_im, 1, N);
-            diffvalue = sum((diff).^2);
-            [M,I] = min(sum((eigcoeffs_training - repmat(eigcoeffs_im, 1, N)).^2));
+            diff = eigcoeffs_im(1:k,:) - eigcoeffs_training(1:k,:);
+            diffsqrd = diff.^2;
+            diffvalue = sum(diffsqrd, 1);
+            [M,I] = min(diffvalue);
             
             %Based on the index, compute the predicted identity.
             identity = id(I);
